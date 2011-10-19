@@ -11,14 +11,23 @@ CONFIG += staticlib create_prl
 QT -= gui
 QT += xmlpatterns
 
-# Try to find htmlcxx via pkg-config
-unix {
+HEADERS = qhtmlnodemodel.h
+SOURCES = qhtmlnodemodel.cpp
+
+# Try to find htmlcxx
+!isEmpty(htmlcxx_cflags) | !isEmpty(htmlcxx_libs) {
+	QMAKE_CXXFLAGS += $$htmlcxx_flags
+	QMAKE_LIBS += $$htmlcxx_libs
+} else:contains(QT_VERSION, ^4\\.[0-7]\\..*) {
+	unix {
+		CONFIG += link_pkgconfig
+		PKGCONFIG += htmlcxx
+	} else {
+		error("Please run qmake with htmlcxx_cflags and htmlcxx_libs")
+	}
+} else:packagesExist(htmlcxx) {
 	CONFIG += link_pkgconfig
 	PKGCONFIG += htmlcxx
+} else {
+	error("Please run qmake with htmlcxx_cflags and htmlcxx_libs")
 }
-
-HEADERS += \
-	qhtmlnodemodel.h
-
-SOURCES += \
-	qhtmlnodemodel.cpp
