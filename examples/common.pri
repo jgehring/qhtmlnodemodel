@@ -5,10 +5,7 @@
 QT -= gui
 QT += xmlpatterns
 
-unix: {
-	CONFIG += link_pkgconfig
-	PKGCONFIG += htmlcxx
-}
+CONFIG += link_prl
 
 INCLUDEPATH += ../src
 LIBS += -L.. -lqhtmlnodemodel

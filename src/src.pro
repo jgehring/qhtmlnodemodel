@@ -6,7 +6,7 @@ TEMPLATE = lib
 DESTDIR = ..
 TARGET = qhtmlnodemodel
 
-CONFIG += staticlib
+CONFIG += staticlib create_prl
 
 QT -= gui
 QT += xmlpatterns
