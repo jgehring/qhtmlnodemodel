@@ -25,9 +25,11 @@ SOURCES = qhtmlnodemodel.cpp
 	} else {
 		error("Please run qmake with htmlcxx_cflags and htmlcxx_libs")
 	}
-} else:packagesExist(htmlcxx) {
-	CONFIG += link_pkgconfig
-	PKGCONFIG += htmlcxx
 } else {
-	error("Please run qmake with htmlcxx_cflags and htmlcxx_libs")
+	packagesExist(htmlcxxp) {
+		CONFIG += link_pkgconfig
+		PKGCONFIG += htmlcxx
+	} else {
+		error("Please run qmake with htmlcxx_cflags and htmlcxx_libs")
+	}
 }
