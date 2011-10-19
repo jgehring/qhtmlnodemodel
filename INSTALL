@@ -1,0 +1,11 @@
+qhtmlnodemodel - A QAbstractXmlNodeModel for HTML documents
+===========================================================
+
+QHtmlNodeModel obviously depends on Qt, version 4.6 or higher. If
+you're on *nix (Linux, BSD, Mac OS X ...), install htmlcxx and run
+qmake -r. pkg-config will be used to find htmlcxx.
+
+If pkg-config can't find htmlcxx or you're on Windows, specify
+htmlcxx_cflags and htmlcxx_libs on the command line with qmake, i.e.:
+
+	qmake -r htmlcxx_flags="-I/usr/include" htmlcxx_libs="-lhtmlcxx"
