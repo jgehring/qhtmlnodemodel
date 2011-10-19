@@ -1,0 +1,16 @@
+qhtmlnodemodel - A QAbstractXmlNodeModel for HTML documents
+===========================================================
+
+qhtmlnodemodel is a QAbstractXmlNodeModel implementation for HTML documents. It
+uses htmlcxx (http://htmlcxx.sourceforge.net/) for HTML parsing and offers the
+document as a custom XML node model that can be used with Qt's XmlPatterns module.
+This allows you to use XPath, XQuery, XSLT and other fun stuff on HTML documents
+that aren't valid XML.
+
+Usage is quite simple - please take a look at the examples and / or read
+the usage notes at http://doc.qt.nokia.com/qabstractxmlnodemodel.html#usage .
+
+The "library" constists of two source files and is licensed under 3-clause
+BSD license. However, please be aware that htmlcxx itself uses the GNU Lesser
+General Public License (LGPL) and uses tree.hh, which in turn is available under
+the GNU General Public License (GPL), version 2 or 3.
