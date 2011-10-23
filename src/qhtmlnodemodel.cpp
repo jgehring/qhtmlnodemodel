@@ -163,8 +163,8 @@ QXmlName QHtmlNodeModel::name(const QXmlNodeModelIndex &node) const
 	}
 
 	tree<HTML::Node>::iterator it = d->toIterator(node);
-	if (it->isComment()) {
-		return QXmlName(namePool(), "_comment");
+	if (!it->isTag()) {
+		return QXmlName();
 	}
 	return QXmlName(namePool(), QLatin1String(it->tagName().c_str()));
 }
@@ -193,7 +193,15 @@ QXmlNodeModelIndex::NodeKind QHtmlNodeModel::kind(const QXmlNodeModelIndex &node
 	if (d->isAttribute(node)) {
 		return QXmlNodeModelIndex::Attribute;
 	}
-	return QXmlNodeModelIndex::Element;
+
+	tree<HTML::Node>::iterator it = d->toIterator(node);
+	if (it->isComment()) {
+		return QXmlNodeModelIndex::Comment;
+	}
+	if (it->isTag()) {
+		return QXmlNodeModelIndex::Element;
+	}
+	return QXmlNodeModelIndex::Text;
 }
 
 /*!
@@ -203,7 +211,7 @@ QXmlNodeModelIndex::NodeKind QHtmlNodeModel::kind(const QXmlNodeModelIndex &node
  */
 QXmlNodeModelIndex QHtmlNodeModel::root(const QXmlNodeModelIndex &node) const
 {
-	Q_UNUSED(node)
+	Q_UNUSED(node);
 	return d->toNodeIndex(&d->dom);
 }
 
@@ -216,6 +224,10 @@ QVariant QHtmlNodeModel::typedValue(const QXmlNodeModelIndex &node) const
 	if (d->isAttribute(node)) {
 		QByteArray attrName = d->attributeName(node);
 		return QString(it->attribute(attrName.data()).second.c_str());
+	}
+
+	if (!it->isTag()) {
+		return QLatin1String(it->text().c_str());
 	}
 	return QString(it->tagName().c_str());
 }
