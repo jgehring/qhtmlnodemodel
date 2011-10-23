@@ -289,7 +289,9 @@ QVector<QXmlNodeModelIndex> QHtmlNodeModel::attributes(const QXmlNodeModelIndex 
 	std::map<std::string, std::string>::const_iterator it;
 	std::map<std::string, std::string>::const_iterator end = t->data.attributes().end();
 	for (it = t->data.attributes().begin(); it != end; ++it) {
-		result += d->toNodeIndex(t, it->first.c_str());
+		if (!it->first.empty()) {
+			result += d->toNodeIndex(t, it->first.c_str());
+		}
 	}
 
 	return result;
