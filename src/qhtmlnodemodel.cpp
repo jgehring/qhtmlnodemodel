@@ -44,6 +44,7 @@ class QHtmlNodeModelPrivate
 public:
 	QHtmlNodeModel *model;
 	QUrl uri;
+	QHtmlNodeModel::CaseConversion cc;
 
 	HTML::ParserDom parser;
 	tree<HTML::Node> dom;
@@ -57,6 +58,8 @@ public:
 	QHtmlNodeModelPrivate(QHtmlNodeModel *model)
 		: model(model), firstAttribute(1)
 	{
+		cc = QHtmlNodeModel::KeepCase;
+
 		attributeCount = firstAttribute;
 		while (attributeNames.count() < firstAttribute) {
 			attributeNames += QByteArray();
@@ -142,6 +145,22 @@ QHtmlNodeModel::~QHtmlNodeModel()
 }
 
 /*!
+ * Sets the case conversion mode
+ */
+void QHtmlNodeModel::setCaseConversion(CaseConversion cc)
+{
+	d->cc = cc;
+}
+
+/*!
+ * Returns the current case conversion mode
+ */
+QHtmlNodeModel::CaseConversion QHtmlNodeModel::caseConversion() const
+{
+	return d->cc;
+}
+
+/*!
  * This function returns the relative document order for the
  * nodes indexed by \a ni1 and \a ni2. It is used for the \c Is
  * operator and for sorting nodes in document order.
@@ -166,7 +185,19 @@ QXmlName QHtmlNodeModel::name(const QXmlNodeModelIndex &node) const
 	if (!it->isTag()) {
 		return QXmlName();
 	}
-	return QXmlName(namePool(), QLatin1String(it->tagName().c_str()));
+
+	QString tag(it->tagName().c_str());
+	switch (d->cc) {
+		case ToLowerCase:
+			tag = tag.toLower();
+			break;
+		case ToUpperCase:
+			tag = tag.toUpper();
+			break;
+		default:
+			break;
+	}
+	return QXmlName(namePool(), tag);
 }
 
 /*!
@@ -229,7 +260,19 @@ QVariant QHtmlNodeModel::typedValue(const QXmlNodeModelIndex &node) const
 	if (!it->isTag()) {
 		return QLatin1String(it->text().c_str());
 	}
-	return QString(it->tagName().c_str());
+
+	QString tag(it->tagName().c_str());
+	switch (d->cc) {
+		case ToLowerCase:
+			tag = tag.toLower();
+			break;
+		case ToUpperCase:
+			tag = tag.toUpper();
+			break;
+		default:
+			break;
+	}
+	return tag;
 }
 
 /*!

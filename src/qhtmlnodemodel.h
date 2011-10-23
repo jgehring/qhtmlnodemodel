@@ -45,10 +45,20 @@ class QHtmlNodeModel : public QSimpleXmlNodeModel
 	friend class QHtmlNodeModelPrivate;
 
 	public:
+		enum CaseConversion {
+			KeepCase,       ///< Keep the case of the tags
+			ToLowerCase,    ///< Convert all tag names to lowercase
+			ToUpperCase     ///< Convert all tag names to uppercase
+		};
+
+	public:
 		QHtmlNodeModel(const QXmlNamePool &namepool, const QByteArray &source, const QUrl &uri = QUrl());
 		~QHtmlNodeModel();
 
 		inline QXmlNodeModelIndex dom() const { return root(QXmlNodeModelIndex()); }
+
+		void setCaseConversion(CaseConversion fc);
+		CaseConversion caseConversion() const;
 
 		virtual QXmlNodeModelIndex::DocumentOrder compareOrder(const QXmlNodeModelIndex &ni1, const QXmlNodeModelIndex &ni2) const;
 		virtual QXmlName name(const QXmlNodeModelIndex &node) const;
