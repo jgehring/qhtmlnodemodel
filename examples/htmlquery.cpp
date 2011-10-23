@@ -31,7 +31,7 @@
 #include <QCoreApplication>
 #include <QFile>
 #include <QXmlQuery>
-#include <QXmlSerializer>
+#include <QXmlFormatter>
 
 #include "qhtmlnodemodel.h"
 
@@ -82,13 +82,13 @@ int main(int argc, char **argv)
 	}
 	query.setQuery(&queryFile, QUrl::fromLocalFile(argv[2]));
 
-	// Setup a serializer printing to stdout
+	// Setup a formatter printing to stdout
 	QFile out;
 	out.open(stdout, QIODevice::WriteOnly);
-	QXmlSerializer serializer(query, &out);
+	QXmlFormatter formatter(query, &out);
 
 	// Evaluate and exit
-	if (!query.evaluateTo(&serializer)) {
+	if (!query.evaluateTo(&formatter)) {
 		return 1;
 	}
 	return 0;
