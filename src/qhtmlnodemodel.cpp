@@ -189,7 +189,7 @@ QXmlName QHtmlNodeModel::name(const QXmlNodeModelIndex &node) const
 	}
 
 	tree<HTML::Node>::iterator it = d->toIterator(node);
-	if (!it->isTag()) {
+	if (!it->isTag() || it == d->dom.begin()) {
 		return QXmlName();
 	}
 
@@ -233,12 +233,14 @@ QXmlNodeModelIndex::NodeKind QHtmlNodeModel::kind(const QXmlNodeModelIndex &node
 	}
 
 	tree<HTML::Node>::iterator it = d->toIterator(node);
-	if (it->isComment()) {
+	if (!it->isTag() || it == d->dom.begin()) {
+		return QXmlNodeModelIndex::Document;
+	} else if (it->isComment()) {
 		return QXmlNodeModelIndex::Comment;
-	}
-	if (it->isTag()) {
+	} else if (it->isTag()) {
 		return QXmlNodeModelIndex::Element;
 	}
+
 	return QXmlNodeModelIndex::Text;
 }
 
