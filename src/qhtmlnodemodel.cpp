@@ -50,8 +50,8 @@ public:
 	tree<HTML::Node> dom;
 
 	// Mapping of attribute names to IDs
-	mutable QHash<QByteArray, int> attributeIds;
-	mutable QList<QByteArray> attributeNames;
+	mutable QHash<const char *, int> attributeIds;
+	mutable QList<const char *> attributeNames;
 	mutable int attributeCount;
 	const int firstAttribute;
 
@@ -62,7 +62,7 @@ public:
 
 		attributeCount = firstAttribute;
 		while (attributeNames.count() < firstAttribute) {
-			attributeNames += QByteArray();
+			attributeNames += NULL;
 		}
 	}
 
@@ -91,7 +91,7 @@ public:
 	}
 
 	// Converts an attribute of a HTML node to a model index
-	QXmlNodeModelIndex toNodeIndex(tree_node_<HTML::Node> *node, const QByteArray &attribute) const
+	QXmlNodeModelIndex toNodeIndex(tree_node_<HTML::Node> *node, const char *attribute) const
 	{
 		// Register attribute if necessary
 		if (!attributeIds.contains(attribute)) {
@@ -115,13 +115,13 @@ public:
 	}
 
 	// Returns the attribute name of the given index
-	QByteArray attributeName(const QXmlNodeModelIndex &index)
+	const char *attributeName(const QXmlNodeModelIndex &index)
 	{
 		int id = index.additionalData();
 		if (id < attributeNames.count()) {
 			return attributeNames[id];
 		}
-		return QByteArray();
+		return NULL;
 	}
 };
 
@@ -253,8 +253,8 @@ QVariant QHtmlNodeModel::typedValue(const QXmlNodeModelIndex &node) const
 {
 	tree<HTML::Node>::iterator it = d->toIterator(node);
 	if (d->isAttribute(node)) {
-		QByteArray attrName = d->attributeName(node);
-		return QString(it->attribute(attrName.data()).second.c_str());
+		const char *attrName = d->attributeName(node);
+		return QString(it->attribute(attrName).second.c_str());
 	}
 
 	if (!it->isTag()) {
