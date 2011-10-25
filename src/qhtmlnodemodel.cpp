@@ -165,10 +165,17 @@ QHtmlNodeModel::CaseConversion QHtmlNodeModel::caseConversion() const
  * nodes indexed by \a ni1 and \a ni2. It is used for the \c Is
  * operator and for sorting nodes in document order.
  */
-QXmlNodeModelIndex::DocumentOrder QHtmlNodeModel::compareOrder(const QXmlNodeModelIndex &, const QXmlNodeModelIndex &) const
+QXmlNodeModelIndex::DocumentOrder QHtmlNodeModel::compareOrder(const QXmlNodeModelIndex &n1, const QXmlNodeModelIndex &n2) const
 {
-	// No order defined here
-	return QXmlNodeModelIndex::Precedes;
+	tree<HTML::Node>::iterator it = d->toIterator(n1);
+	tree<HTML::Node>::iterator jt = d->toIterator(n2);
+
+	if (it->offset() < jt->offset()) {
+		return QXmlNodeModelIndex::Precedes;
+	} else if (it->offset() < jt->offset()) {
+		return QXmlNodeModelIndex::Follows;
+	}
+	return QXmlNodeModelIndex::Is;
 }
 
 /*!
