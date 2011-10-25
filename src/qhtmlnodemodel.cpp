@@ -172,7 +172,7 @@ QXmlNodeModelIndex::DocumentOrder QHtmlNodeModel::compareOrder(const QXmlNodeMod
 
 	if (it->offset() < jt->offset()) {
 		return QXmlNodeModelIndex::Precedes;
-	} else if (it->offset() < jt->offset()) {
+	} else if (it->offset() > jt->offset()) {
 		return QXmlNodeModelIndex::Follows;
 	}
 	return QXmlNodeModelIndex::Is;
